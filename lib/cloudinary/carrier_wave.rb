@@ -25,11 +25,17 @@ module Cloudinary::CarrierWave
       self.original_filename = nil
     else
       @file = CloudinaryFile.new(identifier, self)
-      @public_id = @stored_public_id = @file.public_id
+      unless @file.public_id == "_old_"
+        @public_id = @stored_public_id = @file.public_id
+      else
+        @public_id = @stored_public_id = nil
+      end
+
       @stored_version = @file.version
       self.original_filename = sanitize(@file.filename)
     end
   end  
+
 
   def url(*args)
     if args.first && !args.first.is_a?(Hash)
